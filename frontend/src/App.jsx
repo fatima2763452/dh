@@ -103,159 +103,159 @@ function App() {
                 <PWAProvider>
                     <PermissionsProvider>
                         <MarketDataProvider>
-                        {/* Version Checker - Shows update banner when new version available */}
-                        <VersionChecker />
+                            {/* Version Checker - Shows update banner when new version available */}
+                            <VersionChecker />
 
-                    <Suspense fallback={<PageLoader />}>
-                        <Routes>
-                            <Route path="/" element={<LandingPage />} />
-                            <Route path="/login" element={<LoginForm />} />
-                            <Route path="/register" element={<RegistrationForm />} />
-                            <Route path="/brockerDetail" element={<BrockerDetailPage />} />
-                            <Route path="/customerDetail" element={<CustomerDetailsPage />} />
-                            <Route path="/broker/:brokerId/customerDetail" element={<CustomerDetailsPage />} />
-                            <Route path="/recycle-bin" element={<RecycleBin />} />
-                            <Route path="/broker-recycle-bin" element={<BrokerRecycleBin />} />
+                            <Suspense fallback={<PageLoader />}>
+                                <Routes>
+                                    <Route path="/" element={<LandingPage />} />
+                                    <Route path="/login" element={<LoginForm />} />
+                                    <Route path="/register" element={<RegistrationForm />} />
+                                    <Route path="/brockerDetail" element={<BrockerDetailPage />} />
+                                    <Route path="/customerDetail" element={<CustomerDetailsPage />} />
+                                    <Route path="/broker/:brokerId/customerDetail" element={<CustomerDetailsPage />} />
+                                    <Route path="/recycle-bin" element={<RecycleBin />} />
+                                    <Route path="/broker-recycle-bin" element={<BrokerRecycleBin />} />
 
-                            {/* Admin Routes */}
-                            <Route path="/admin/registrations" element={<AdminRegistrations />} />
-                            <Route path="/admin/access-token" element={<AdminAccessToken />} />
-                            <Route path="/admin/totp" element={<AdminTOTP />} />
-                            <Route path="/admin/logs" element={<AdminLogs />} />
-                            <Route
-                                path="/watchlist"
-                                element={
-                                    <Layout>
-                                        <Watchlist />
-                                    </Layout>
-                                }
-                            />
+                                    {/* Admin Routes */}
+                                    <Route path="/admin/registrations" element={<AdminRegistrations />} />
+                                    <Route path="/admin/access-token" element={<AdminAccessToken />} />
+                                    <Route path="/admin/totp" element={<AdminTOTP />} />
+                                    <Route path="/admin/logs" element={<AdminLogs />} />
+                                    <Route
+                                        path="/watchlist"
+                                        element={
+                                            <Layout>
+                                                <Watchlist />
+                                            </Layout>
+                                        }
+                                    />
 
 
-                            <Route
-                                path="/portfolio"
-                                element={
-                                    <Layout>
-                                        <Portfolio />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/portfolio"
+                                        element={
+                                            <Layout>
+                                                <Portfolio />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/portfolio/invoice"
-                                element={
-                                    <Layout>
-                                        <Invoice />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/portfolio/invoice"
+                                        element={
+                                            <Layout>
+                                                <Invoice />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/funds"
-                                element={
-                                    <Layout>
-                                        <FundPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/funds"
+                                        element={
+                                            <Layout>
+                                                <FundPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/funds/mcx"
-                                element={
-                                    <Layout>
-                                        <McxFundPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/funds/mcx"
+                                        element={
+                                            <Layout>
+                                                <McxFundPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/funds/add"
-                                element={
-                                    <Layout>
-                                        <AddFundsPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/funds/add"
+                                        element={
+                                            <Layout>
+                                                <AddFundsPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/funds/withdraw"
-                                element={
-                                    <Layout>
-                                        <WithdrawFundsPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/funds/withdraw"
+                                        element={
+                                            <Layout>
+                                                <WithdrawFundsPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/funds/requests"
-                                element={
-                                    <Layout>
-                                        <FundRequestsPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/funds/requests"
+                                        element={
+                                            <Layout>
+                                                <FundRequestsPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/orders"
-                                element={
-                                    <Layout>
-                                        <Orders />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/orders"
+                                        element={
+                                            <Layout>
+                                                <Orders />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/orders/add-closed-order"
-                                element={
-                                    <Layout>
-                                        <AddClosedOrder />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/orders/add-closed-order"
+                                        element={
+                                            <Layout>
+                                                <AddClosedOrder />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/profile"
-                                element={
-                                    <Layout>
-                                        <Profile />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/profile"
+                                        element={
+                                            <Layout>
+                                                <Profile />
+                                            </Layout>
+                                        }
+                                    />
 
-                             <Route
-                                path="/profile/permissions"
-                                element={
-                                    <Layout>
-                                        <CustomerPermissions />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/profile/permissions"
+                                        element={
+                                            <Layout>
+                                                <CustomerPermissions />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/profile/advance-jobbing"
-                                element={
-                                    <Layout>
-                                        <AdvanceJobbingPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/profile/advance-jobbing"
+                                        element={
+                                            <Layout>
+                                                <AdvanceJobbingPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/search"
-                                element={
-                                    <Layout>
-                                        <SearchPage />
-                                    </Layout>
-                                }
-                            />
+                                    <Route
+                                        path="/search"
+                                        element={
+                                            <Layout>
+                                                <SearchPage />
+                                            </Layout>
+                                        }
+                                    />
 
-                            <Route
-                                path="/chart/:instrument_token"
-                                element={<ChartPage />}
-                            />
-                        </Routes>
-                    </Suspense>
-                    </MarketDataProvider>
+                                    <Route
+                                        path="/chart/:instrument_token"
+                                        element={<ChartPage />}
+                                    />
+                                </Routes>
+                            </Suspense>
+                        </MarketDataProvider>
                     </PermissionsProvider>
                 </PWAProvider>
             </ThemeProvider>

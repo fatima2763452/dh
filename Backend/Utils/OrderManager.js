@@ -43,6 +43,34 @@ export const loadOpenOrders = async () => {
     }
 };
 
+export const removeFromWatchlist = (orderId, token) => {
+    if (!orderId) return;
+    const orderIdStr = String(orderId);
+
+    if (token) {
+        const tokenStr = String(token);
+        if (activeTriggers.has(tokenStr)) {
+            const ordersMap = activeTriggers.get(tokenStr);
+            ordersMap.delete(orderIdStr);
+            if (ordersMap.size === 0) {
+                activeTriggers.delete(tokenStr);
+            }
+            return;
+        }
+    }
+
+    // Fallback: search across all tokens in watchlist
+    for (const [t, ordersMap] of activeTriggers.entries()) {
+        if (ordersMap.has(orderIdStr)) {
+            ordersMap.delete(orderIdStr);
+            if (ordersMap.size === 0) {
+                activeTriggers.delete(t);
+            }
+            break;
+        }
+    }
+};
+
 /**
  * =========================================================
  * 3. ADD ORDER TO MEMORY
@@ -50,8 +78,9 @@ export const loadOpenOrders = async () => {
  * =========================================================
  */
 export const addToWatchlist = (order) => {
-    // 1. Agar Order CLOSED hai to ignore karo
-    if (order.order_status === 'CLOSED') return;
+    if (!order) return;
+    // 1. Agar Order CLOSED ya RESTRICTED hai to ignore karo (no TP/SL tracking for closed orders)
+    if (order.order_status === 'CLOSED' || order.order_status === 'RESTRICTED') return;
 
     // Use instrument_token for Kite (fallback to security_Id for backward compatibility)
     const token = String(order.instrument_token || order.security_Id);
@@ -98,19 +127,12 @@ export const addToWatchlist = (order) => {
  * =========================================================
  */
 export const updateTriggerInWatchlist = (order) => {
-    // Use instrument_token for Kite (fallback to security_Id for backward compatibility)
-    const token = String(order.instrument_token || order.security_Id);
+    if (!order) return;
+    const token = String(order.instrument_token || order.security_Id || "");
     const orderIdStr = String(order._id);
 
-    // Step 1: Purana entry hatao (taaki duplicate na ho)
-    if (activeTriggers.has(token)) {
-        const ordersMap = activeTriggers.get(token);
-        ordersMap.delete(orderIdStr);
-
-        if (ordersMap.size === 0) {
-            activeTriggers.delete(token);
-        }
-    }
+    // Step 1: Purana entry hatao (taaki closed/stale entries na rahein)
+    removeFromWatchlist(orderIdStr, token);
 
     // Step 2: Agar abhi bhi CLOSED aur RESTRICTED nahi hai, to wapas add karo
     if (order.order_status !== 'CLOSED' && order.order_status !== 'RESTRICTED') {
@@ -131,13 +153,7 @@ const executeExit = async (orderData, exitPrice, reason) => {
 
     try {
         // A. Remove from Memory IMMEDIATELY (Prevent Double Execution)
-        if (activeTriggers.has(token)) {
-            const ordersMap = activeTriggers.get(token);
-            ordersMap.delete(orderId);
-            if (ordersMap.size === 0) {
-                activeTriggers.delete(token);
-            }
-        }
+        removeFromWatchlist(orderId, token);
 
         // B. Update Order Status in Database
         let finalExitPrice = Number(exitPrice);
@@ -230,6 +246,11 @@ export const onMarketTick = async ({ token, ltp }) => {
 
     // 2. Iterate through orders Map
     for (const order of ordersMap.values()) {
+        if (order.status === 'CLOSED' || order.status === 'RESTRICTED') {
+            ordersMap.delete(order.orderId);
+            continue;
+        }
+
         let hit = false;
         let hitReason = "";
         let hitPrice = 0;
@@ -252,6 +273,10 @@ export const onMarketTick = async ({ token, ltp }) => {
         if (hit) {
             exitPromises.push(executeExit({ ...order, token: String(token) }, hitPrice, hitReason));
         }
+    }
+
+    if (ordersMap.size === 0) {
+        activeTriggers.delete(String(token));
     }
 
     if (exitPromises.length > 0) {

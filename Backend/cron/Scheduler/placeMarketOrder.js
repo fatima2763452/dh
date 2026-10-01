@@ -5,6 +5,7 @@ import Fund from '../../Model/FundModel.js';
 import { rollbackOptionUsage } from '../../Utils/OptionLimitManager.js';
 import { rollbackMcxUsage } from '../../Utils/McxLimitManager.js';
 import { rollbackMcxOptionUsage } from '../../Utils/McxOptionLimitManager.js';
+import { removeFromWatchlist } from '../../Utils/OrderManager.js';
 
 // ---------------------------------------------------------
 // 1. HELPER: Fetch Live LTP (Using Kite Quote API)
@@ -144,6 +145,9 @@ async function placeMarketOrder(orderId) {
 
         if (res.matchedCount > 0 || res.modifiedCount > 0) {
             console.log(`[placeMarketOrder] Order ${order._id} Closed at ₹${currentLtp}`);
+
+            // Remove from memory watchlist so TP/SL triggers won't execute on closed order
+            removeFromWatchlist(order._id, order.instrument_token || order.security_Id);
 
             // 5. Release Funds Logic
             await releaseFundsOnSquareoff(order, currentLtp);

@@ -54,7 +54,7 @@ const IndexCard = ({ name, price, change, onClick }) => {
     : `${isPositive ? '+' : ''}${netC.toFixed(2)} (${isPositive ? '+' : ''}${numC.toFixed(2)}%)`;
 
   return (
-    <div 
+    <div
       className="flex-shrink-0 bg-[var(--bg-secondary)] border border-[var(--border-color)] px-3.5 py-2.5 rounded-lg mx-1 flex flex-col justify-between shadow-sm cursor-pointer hover:bg-[var(--bg-hover)] transition-colors"
       style={{ width: '164px', height: '62px' }}
       onClick={onClick}
@@ -164,7 +164,7 @@ const SwipeableWatchlistItem = ({
                 </span>
               )}
             </div>
-             <span className="text-[10px] text-[#787b86] dark:text-[#787b86] block truncate font-medium">
+            <span className="text-[10px] text-[#787b86] dark:text-[#787b86] block truncate font-medium">
               {formatTradingSymbol(item.tradingSymbol)} • {item.exchange}
             </span>
           </div>
@@ -357,7 +357,7 @@ function Watchlist() {
     try {
       const userString = localStorage.getItem('loggedInUser');
       const userObject = userString ? JSON.parse(userString) : {};
-      
+
       if (userObject.role === 'customer') {
         const globalBrokerId = localStorage.getItem('associatedBrokerStringId');
         return {
@@ -365,7 +365,7 @@ function Watchlist() {
           customerId: userObject.id
         };
       }
-      
+
       const raw = localStorage.getItem('activeContext');
       const parsed = raw ? JSON.parse(raw) : {};
       return {
@@ -1489,8 +1489,8 @@ function Watchlist() {
                       setShowFilterDropdown(false);
                     }}
                     className={`block w-full text-left px-4 py-2 text-sm transition-colors ${activeFilter === key
-                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium'
-                        : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
+                      ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-medium'
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]'
                       }`}
                   >
                     {label}

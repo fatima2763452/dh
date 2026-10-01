@@ -6,6 +6,7 @@ import { lmf as dhanSocket } from "../index.js"; // Rename karke use karo taaki 
 import {
   addToWatchlist,
   updateTriggerInWatchlist,
+  removeFromWatchlist,
 } from "../Utils/OrderManager.js";
 import { checkOptionLimit, updateOptionUsage, rollbackOptionUsage, resetOptionUsageIfNewDay } from "../Utils/OptionLimitManager.js";
 import { checkMcxLimit, updateMcxUsage, rollbackMcxUsage, resetMcxUsageIfNewDay } from "../Utils/McxLimitManager.js";
@@ -707,10 +708,8 @@ const updateOrder = asyncHandler(async (req, res) => {
       return res.status(500).json({ success: false, message: 'Failed to update order' });
     }
 
-    // 👇 Update Watchlist (Auto-Exit System)
-    if (updated.order_status !== 'CLOSED') {
-      updateTriggerInWatchlist(updated);
-    }
+    // 👇 Update Watchlist (Auto-Exit System - removes if CLOSED/RESTRICTED, updates if active)
+    updateTriggerInWatchlist(updated);
 
     return res.status(200).json({ success: true, message: 'Order updated', order: updated });
 
@@ -767,6 +766,7 @@ const exitAllOpenOrder = asyncHandler(async (req, res) => {
   const closeTime = closed_at || new Date();
 
   for (const order of openOrders) {
+    removeFromWatchlist(order._id, order.instrument_token || order.security_Id);
     const exitPrice = closed_ltp_map ? closed_ltp_map[order._id] : 0;
     const marginToRelease = Number(order.margin_blocked || (order.price * order.quantity) || 0);
 
@@ -917,6 +917,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
       }
     }
 
+    removeFromWatchlist(order._id, order.instrument_token || order.security_Id);
     await Order.findByIdAndDelete(order_id);
     return res.status(200).json({ success: true, message: "Order deleted successfully" });
   } catch (error) {
