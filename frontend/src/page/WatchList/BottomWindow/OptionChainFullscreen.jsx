@@ -352,6 +352,16 @@ const OptionChainFullscreen = ({ selectedStock, sheetData, onClose, brokerId, cu
                 </div>
             );
         }
+        // chainData is empty array = no options exist for this stock (not an error)
+        if (chainData && chainData.length === 0 && !loading) {
+            return (
+                <div className="flex-1 flex flex-col items-center justify-center p-4 text-center text-[var(--text-secondary)]">
+                    <AlertCircle className="w-6 h-6 mb-2 text-[var(--text-muted)]" />
+                    <p className="text-sm">Option chain not available for this stock</p>
+                    <p className="text-xs text-[var(--text-muted)] mt-1">No expiry dates found</p>
+                </div>
+            );
+        }
         if (!filteredChain || filteredChain.length === 0) {
             return (
                 <div className="flex-1 flex flex-col items-center justify-center p-4 text-center text-[var(--text-secondary)]">

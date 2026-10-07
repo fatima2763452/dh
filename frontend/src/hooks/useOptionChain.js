@@ -76,6 +76,14 @@ export function useOptionChain({ name, segment, expiry }) {
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
+        // 404 means no expiries or no option data — not a real error, just no data
+        if (response.status === 404) {
+          console.log('[useOptionChain] No option data available:', errData.details || errData.error);
+          setChainData([]);
+          setError(null);
+          lastFetchParamsRef.current = paramsKey;
+          return null;
+        }
         throw new Error(errData.details || errData.error || 'Failed to fetch option chain');
       }
 
